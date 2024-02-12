@@ -22,13 +22,15 @@ class AppFiguresClient:
 
     def __init__(self, config):
         self.start_date = config.get('start_date')
-        self.auth_type = config.get("auth_type")
+        self.auth_type:str = config.get("auth_type").lower()
         self.stream_name = config.get("stream_name")
         if self.auth_type == "oauth":
             self.client_key = config.get("client_key")
             self.client_secret = config.get("client_secret")
             self.access_token = config.get("access_token")
             self.access_secret = config.get("access_secret")
+        elif auth_type == "pat":
+            self.api_key = config.get('pat')
         else:
             self.api_key = config.get('api_key')
             self.password = config.get('password')
@@ -56,7 +58,13 @@ class AppFiguresClient:
                     headers=headers,
                     timeout=600
                 )
-
+            elif self.auth_type == "pat":
+                headers = {"Authorization": f"Bearer {self.api_key}"}
+                response = requests.get(
+                    self.BASE_URI + uri.lstrip("/"),
+                    headers=headers,
+                    timeout=600
+                )
             else:
                 headers = {"X-Client-Key": self.api_key}
                 auth = (self.username, self.password)
