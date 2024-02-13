@@ -29,7 +29,7 @@ class AppFiguresClient:
             self.client_secret = config.get("client_secret")
             self.access_token = config.get("access_token")
             self.access_secret = config.get("access_secret")
-        elif auth_type == "pat":
+        elif self.auth_type == "pat":
             self.api_key = config.get('pat')
         else:
             self.api_key = config.get('api_key')
